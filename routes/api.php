@@ -25,3 +25,4 @@ Route::get('/report', [AccountCon::class, 'report']);
 Route::get('/item', [ItemCon::class, 'index']);
 Route::post('/item', [ItemCon::class, 'store']);
 Route::put('/item/{id}', [ItemCon::class, 'update']);
+Route::delete('/item/{id}', [ItemCon::class, 'destroy']);

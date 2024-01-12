@@ -86,6 +86,7 @@ class ItemCon extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        Item::find($id)->delete();
+       
     }
 }
