@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Item;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class ItemCon extends Controller
 {
@@ -11,7 +13,8 @@ class ItemCon extends Controller
      */
     public function index()
     {
-        //
+        $item= Item::all();
+        return response()->json(['code'=>200, 'message'=>'data fetched', 'data'=>$item],200);
     }
 
     /**
@@ -27,7 +30,17 @@ class ItemCon extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator= Validator::make($request->all(),[
+            'name'=>'required',
+            'price'=>'required',
+            'uom'=>'required',
+        ]);
+        if($validator->fails()){
+            return response()->json(['code'=>422,'errors'=>$validator->errors()],422);
+        }
+        $data= $request->all();
+        Item::create($data);
+        return response()->json(['code'=>201, 'message'=>'Inserted Successfully','data'=>$data],201);
     }
 
     /**
@@ -43,7 +56,8 @@ class ItemCon extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $item=Item::find($id);
+        
     }
 
     /**
@@ -51,7 +65,20 @@ class ItemCon extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $validator= Validator::make($request->all(),[
+            'name'=>'required',
+            'price'=>'required',
+            'uom'=>'required',
+        ]);
+        $item=Item::find($id);
+        if(!$item){
+            return response()->json(['message'=>'item not found'],404);
+        }
+        if($validator->fails()){
+            return response()->json(['code'=>422,'errors'=>$validator->errors()],422);
+        }
+        $item->update($request->all());
+        return response()->json(['code'=>200,'message'=>'updated successfully','data'=>$item,],200);
     }
 
     /**
